@@ -1599,9 +1599,9 @@ my repo coming from:  https://git.sr.ht/~iank/visible-mark
 which is the new location originally moved from: https://gitlab.com/iankelling/visible-mark
 #+BEGIN_SRC emacs-lisp
   (straight-use-package '(visible-mark :type git :host github :repo "nathanvercaemert/visible-mark"))
-  (defface visible-mark-active ;; put this before (require 'visible-mark)
+  (defface visible-mark-active
     '((((type tty) (class mono)))
-      (t (:background "orange"))) "")
+      (t (:background "light salmon"))) "")
   (setq visible-mark-max 2)
   (setq visible-mark-faces `(visible-mark-face1 visible-mark-face2))
   (require 'visible-mark)
