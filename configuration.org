@@ -26,6 +26,17 @@
           result)
       nil))
 #+END_SRC
+*** remove-nth
+#+BEGIN_SRC emacs-lisp
+  (defun remove-nth (n list)
+    (declare
+     (type (integer 0) n)
+     (type list list))
+    (if (or (zerop n) (null list))
+        (cdr list)
+      (cons (car list) (remove-nth (1- n) (cdr list)))))
+#+END_SRC
+
 ** prompts
 *** yes or no -> y or p
 #+BEGIN_SRC emacs-lisp
@@ -484,12 +495,16 @@ this needs to be run before requiring multiple cursors
   (bind-key* "<mouse-8>" 'mc/add-cursor-on-click) ;; qmk btn4 reads as 8
   (bind-key* "<mouse-4>" 'mc/add-cursor-on-click) ;; qmk btn4 reads as 8
 #+END_SRC
-** expand region
+** TODO expand region
 #+BEGIN_SRC emacs-lisp
-    (use-package expand-region
-      :defer 3)
-    (bind-key* "C-c <C-f5> C-a" 'er/contract-region)
-    (bind-key* "C-=" 'er/expand-region)
+  (use-package expand-region
+    :defer 3
+    :config
+    (defun my-er/expand-region ()
+      (interactive)
+      (er/expand-region 1)))
+  (bind-key* "C-c <C-f5> C-a" 'er/contract-region)
+  (bind-key* "C-=" 'my-er/expand-region)
 #+END_SRC
 
 ** electric pair mode
@@ -499,33 +514,47 @@ this needs to be run before requiring multiple cursors
 ** shift by indentation
 #+BEGIN_SRC emacs-lisp
   (defun my-indent-shift-left ()
+    (setq swap-p-m nil)
     (interactive
      (progn
        (if mark-active
            (if (> (point) (mark))
-               (exchange-point-and-mark)))
+               (progn
+                 (exchange-point-and-mark)
+                 (setq swap-p-m t))))
        (let ((deactivate-mark nil))
          (if mark-active
              (indent-rigidly (line-beginning-position) (region-end) (- 4))
-           (indent-rigidly (line-beginning-position) (line-end-position) (- 4)))))
+           (indent-rigidly (line-beginning-position) (line-end-position) (- 4))))
+       (if swap-p-m
+           (exchange-point-and-mark)))
      )
     )
 
   (defun my-indent-shift-right ()
+    (setq swap-p-m nil)
     (interactive
      (progn
        (if mark-active
            (if (> (point) (mark))
-               (exchange-point-and-mark)))
+               (progn
+                 (exchange-point-and-mark)
+                 (setq swap-p-m t))))
        (let ((deactivate-mark nil))
          (if mark-active
              (indent-rigidly (line-beginning-position) (region-end) 4)
-           (indent-rigidly (line-beginning-position) (line-end-position) 4))))
+           (indent-rigidly (line-beginning-position) (line-end-position) 4)))
+       (if swap-p-m
+           (exchange-point-and-mark)))
      )
     )
 
   (bind-key* "<f5> n" 'my-indent-shift-right)
   (bind-key* "<f5> o" 'my-indent-shift-left)
+#+END_SRC
+*** TODO note that I fixed the exchange-point and mark issue
+** TODO delete word forward
+#+BEGIN_SRC emacs-lisp
 #+END_SRC
 * completion
 
@@ -1601,7 +1630,7 @@ which is the new location originally moved from: https://gitlab.com/iankelling/v
   (straight-use-package '(visible-mark :type git :host github :repo "nathanvercaemert/visible-mark"))
   (defface visible-mark-active
     '((((type tty) (class mono)))
-      (t (:background "light salmon"))) "")
+      (t (:background "magenta"))) "")
   (setq visible-mark-max 2)
   (setq visible-mark-faces `(visible-mark-face1 visible-mark-face2))
   (require 'visible-mark)
