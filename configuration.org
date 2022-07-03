@@ -405,7 +405,7 @@ different than the built-in in that it deletes the newline before the killed lin
           (move-end-of-line nil))
       (move-beginning-of-line nil))
     (kill-line)
-    (unless (or (and (bobp) (not (eq ?\n (char-after))))(or (and (not (bobp))(eq ?\n (char-after))) (eobp)))
+    (unless (or (and (bobp) (not (eolp)))(or (and (not (bobp))(eolp)) (eobp)))
       (progn
         (append-next-kill)
         (kill-line)))
@@ -416,6 +416,11 @@ different than the built-in in that it deletes the newline before the killed lin
     (setq beg (line-beginning-position))
     (setq end (line-end-position))
     (setq num-lines 1)
+    (setq trunc-swap nil)
+    (if (not truncate-lines)
+        (progn
+          (toggle-truncate-lines)
+          (setq trunc-swap t)))
     (if mark-active
         (progn
           (if (> (point) (mark))
@@ -428,7 +433,7 @@ different than the built-in in that it deletes the newline before the killed lin
           (setq end (line-end-position))
           (unless swap-p-m
             (exchange-point-and-mark))))
-    (unless (and (not mark-active)(and (bolp) (eq ?\n (char-after))))
+    (unless (and (not mark-active)(and (bolp) (eolp)))
       (setq num-lines (count-lines beg end)))
     (setq swap-p-m nil)
     (if mark-active
@@ -437,15 +442,15 @@ different than the built-in in that it deletes the newline before the killed lin
               (progn
                 (setq swap-p-m t)
                 (exchange-point-and-mark)))
-          (if (and (bolp) (or (eobp) (eq ?\n (char-after))))
-                                          ; count-lines doc explains why this is necessary
+          (if (and (bolp) (or (eobp) (eolp)))
               (setq num-lines (1+ num-lines)))
-          (message "%s" num-lines)
           (dotimes (i num-lines)
             (my-kill-whole-line))
           (unless swap-p-m
             (exchange-point-and-mark)))
       (my-kill-whole-line))
+    (if trunc-swap
+        (toggle-truncate-lines))
     )
   (bind-key* "<f5> j" 'my-kill-all-lines-in-region)
 #+END_SRC
@@ -499,12 +504,9 @@ this needs to be run before requiring multiple cursors
 #+BEGIN_SRC emacs-lisp
   (use-package expand-region
     :defer 3
-    :config
-    (defun my-er/expand-region ()
-      (interactive)
-      (er/expand-region 1)))
+    )
   (bind-key* "C-c <C-f5> C-a" 'er/contract-region)
-  (bind-key* "C-=" 'my-er/expand-region)
+  (bind-key* "C-=" 'er/expand-region)
 #+END_SRC
 
 ** electric pair mode
@@ -1152,7 +1154,7 @@ this should be default...
             )
       ;; (avy-all-windows t)
       :custom-face
-      (avy-goto-char-timer-face ((t (:foreground "000000" :background "#FFFFFF" :weight bold :underline "red"))))
+      (avy-goto-char-timer-face ((t (:background "white" :foreground "black" :weight bold :underline "red" :weight bold))))
       ;; :config
       ;;  ;; this makes matches closer to point have shorter avy-sequences
       ;; (setq avy-orders-alist
@@ -1548,13 +1550,13 @@ not sure what this does
     (bind-key "<f5> q" 'dired-subtree-up dired-mode-map)
     )
 #+END_SRC
-* phi-search
+* TODO phi-search
 #+BEGIN_SRC emacs-lisp
   (require 'phi-search)
   ;; can't get this to work for some reason, I guess I just have to complete search and move from there
   ;; (bind-key "<C-return>" 'phi-search-complete phi-search-default-map)
-  (bind-key "<return>" 'phi-search-complete-at-beginning phi-search-default-map)
-  #+END_SRC
+  ;; (bind-key "<return>" 'phi-search-complete-at-beginning phi-search-default-map)
+#+END_SRC
 * interaction log
 #+BEGIN_SRC emacs-lisp
   (require 'interaction-log)
@@ -1614,13 +1616,13 @@ not sure what this does
 q 'undo-tree-visualizer-quit
 C-q 'undo-tree-visualizer-abort
 #+BEGIN_SRC emacs-lisp
-  (bind-key* "<f8>"  'undo)
+  (bind-key* "<f5> 4"  'undo)
   (use-package undo-tree
     :diminish
     :config
     (global-undo-tree-mode +1)
-    (bind-key* "M-<f8>" 'undo-tree-visualize)
-    (bind-key* "C-<f8>"  'undo-tree-redo))
+    (bind-key* "M-<f5> M-4" 'undo-tree-visualize)
+    (bind-key* "C-<f5> C-4"  'undo-tree-redo))
 #+END_SRC
 * TODO new stuff
 ** visible mark
@@ -1631,6 +1633,16 @@ which is the new location originally moved from: https://gitlab.com/iankelling/v
   (defface visible-mark-active
     '((((type tty) (class mono)))
       (t (:background "magenta"))) "")
+  (defface visible-mark-face1
+    '((((type tty) (class mono)))
+      (t (:background "light salmon" :foreground "black")))  
+    "Example face which can be customized and added to subsequent face lists."
+    :group 'visible-mark)
+  (defface visible-mark-face2
+    '((((type tty) (class mono)))
+      (t (:background "light goldenrod" :foreground "black")))
+    "Example face which can be customized and added to subsequent face lists."
+    :group 'visible-mark)
   (setq visible-mark-max 2)
   (setq visible-mark-faces `(visible-mark-face1 visible-mark-face2))
   (require 'visible-mark)

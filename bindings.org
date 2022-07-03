@@ -1,0 +1,440 @@
+some sat reading:
+[[cite:&kochemazovAssessingProgressSAT2021]]
+
+task:
+make accessible hotkeys for these commands with ahk CAG keys
+on a tri-layer
+https://www.gnu.org/software/emacs/manual/html_node/emacs/Commands-of-GUD.html
+and figure out what all these things do
+https://docs.python.org/3/library/pdb.html
+
+do those two navigation things (indentation and whitespace)
+
+make a hotkey to refresh color identifiers mode
+
+do I need to deal with whitespace somehow?
+
+have swiper work on invisible text too
+
+put lsp-imenu somewhere
+
+need to stick print-screen somewhere
+
+can probably get rid of the treemacs stuff in lsp
+
+keep working on dired subdirectories (might not need this functionality)
+- deleting subdirectory shouldmove cursor back to name of deleted name, not heading of parent
+- going up should go to the directory name of the subdirectory, not the heading of the parent
+
+transition latex layer to a prefix key (like org roam)
+
+get rid of mouse-wheel-1-unit layer
+
+found my keyboard: https://github.com/okke-formsma/dactyl-manuform-tight/
+use the leader key for latex (because it doesn't take a layer)
+note that there is a "dactyl manuform" bookmark folder that has some parts in it
+
+petg is stronger than pla for holding switches
+
+here's the command to generate the things from command line (without having to go into the repl)
+echo '(load-file "src/dactyl_keyboard/dactyl.clj")' | lein repl
+
+a bunch of totally empties 20, 21, 24, 25, 27, 31 (one of these needs to be dynamic macros)
+
+add keys to numpad layer (, . / -)
+
+add functionality to index-down-tri-layer to go back and forth buffers (even if no mark)
+
+I really need to figure out what all weird bindings are I've used in my keymap.c
+- (and get them organized) (also all of the stuff that's going on in ahk)
+  - SEND_STRING(SS_TAP(X_F5) SS_TAP(X_P));
+- all of the process record user stuff is "if record event pressed" - maybe I can save space by only doing this check once
+
+new plan for [[*move by syntactic units][move by syntactic units]]
+- M/C-backpace kill back word
+- M/C-delete kill forward word
+
+implement all the registers
+ 
+funky tri-layer for dynamic macros
+probably 4/8 (rid/rmd) for debugging
+
+this is the ahk run command
+~/../../mnt/c/Program\ Files/AutoHotkey/AutoHotkey.exe ~/Repositories/ahk-scripts/boot.ahk &
+
+note that org mode has weird command for paragraph shift-selection (which is why it doesn't work)
+* blackpill mcu
+[[cite:&98US10WeAct]]
+* things to remember
+
+note that C-M-space marks sexp
+
+MX completion - If there is a "^", you have to type the first letter correctly
+- this is a built in feature working as expected. deleting the first character gives normal fuzzy functionality
+
+linum-mode lpul+lr
+
+remember that C-q aborts the undo tree (and q exits)
+
+note (bind-key* "C-M-x C-M-s" 'wgrep-save-all-buffers) after ripgrep
+
+remember that '(' hides and shows dired details
+
+C-x C-j (dired jump) pulls up the current buffer's file in dired
+
+C-x C-q makes dired buffer editable (for file extension renaming)
+
+** org links
+remember that to save a location in a pdf, I org-store-link on highlighted text, and then insert the stored link
+have to save the pdf after storing link
+Note that I've implemented a workaround: The qmk store link function just immediately saves the buffer (risk/benefit this is a safe time to save)
+
+function to C-c C-l into the recently inserted stored pdf link to redo the label (so I can quote long sections)
+** citations in org roam
+Bound zotero most recent to LI/LMu + LP (ergonomic to stored link hotkeys)
+
+bound hotkey to C-c C-l Enter to change description of link after pdf link or other to rename the description quickly
+to right index + right middle tri layer, right pink (ergonomic to link hotkeys)
+
+C-M-s to save page/pdf in chrome with zotero connector
+add copy of item in zotero for pdfs I couldn't add online
+zotero-most-recent in config to get cite link to most recent zotero
+** notdeft
+to search for tags (even on headlines) it works to just include :tagname: in the query
+* unstructured emacs tasks
+** read books on how to structure zettelkasten (including gtd)
+(I've read this at least once)
+[[cite:&HowTakeSmart]]
+the best point from this article: when taking notes about something, you should be thinking "when do I want to see this not again"
+
+https://notes.andymatuschak.org/Evergreen_notes
+** figure out magit
+[[pdf:~/Documents/books/content/progit.pdf::356++12.19;;annot-356-0][progit.pdf: Page 356; Quoting: Formatting and Whitespace]]
+emerge is for resolving merge conflicts
+git commit -a -m "message" skips "git add ."
+git has a built-in command to check for whitespace errors in a commit
+pro git has sections on working with git client for svn, mercurial, bazaar, perforce
+also has sections for migrating to git from these tools
+** set up capture
+** low priority
+*** figure out git time machine
+*** read sasha and jweigly config
+*** agenda
+agenda: 'swiper/deft tri layer -> a' get a basic tag/todo/keyword search to work (this is based on the agenda directory setup in configuration)
+*** protocol stuff
+https://orgmode.org/manual/The-capture-protocol.html
+
+there is a protocol section of the org roam manual, too
+
+do I have any usecase for this?
+*** more org roam stuff
+Chapter in org roam manual
+17 The Org-mode Ecosystem
+
+winner mode deals well with how following links around changes the windows
+Org-fc for flashcards - can be synced with Anki
+*** c-mode auto-indentation
+figure out auto-indentation (why does it sometimes jump in c mode, like when I type '(' and it's not currently correctly indented)
+maybe this is figured out (I just conformed to the indent-region setting of 4 in [[file:~/.emacs.d/configuration.org::*indentation][indentation]])
+*** fix sentence selection (doesn't work in code for some reason)
+*** use a fuzzy finder for zsh autocompletion
+ivan smirnov has one
+*** think about a text colorizer
+I think these mostly just work with "cat" at the command line, probably not important
+*** why does zotero drag and drop not work?
+*** git mathpix working for equations
+*** get org-download working for screenshots
+*** set emacs as the default git editor
+git config --global core.editor emacs
+*** cad query is the name of the python modeling software
+* call with sam
+** exwm
+exwm emacs window manager - browser is buffer 
+** way back machine
+** give doom a chance
+* interesting things to note
+** C-M-d jumps into next sexp
+maybe just parentheses and brackets etc. Maybe I could edit this for more
+it's down-list I think
+C-M-u is the other way
+** TODO read the ripgrep manual
+** visiblemark.el
+makes the mark visible
+** C-x C-r opens a file in read only mode
+* long term qmk upgrades
+** mods after LTs
+Make the keys that are on the layer tap layers, mod tap layers where appropriate
+So that if the key I'm going for after the layer-tap is released is supposed to be modified
+haven't had this problem before so this isn't high priority
+* registers
+** store location register
+left index up LT, right ring up (can then be followed by any valid register key)
+** jump to location register
+left index up LT, right pinky up (can then be followed by any valid register key)
+** store text register
+left index up LT, right index up (can then be followed by any valid register key)
+** insert text register
+left index up LT, right middle up (can then be followed by any valid register key)
+
+* motion/navigation
+** next visible heading
+right middle up LT, left middle ("left" arrow down)
+** previous visible heading
+right middle up LT, left middle up ("left" arrow up)
+** next same-level heading
+right middle up + right index tri layer, left middle ("left" arrow down)
+** previous same level heading
+right middle up + right index tri layer, left middle up ("left" arrow up)
+** outline up heading
+right middle up LT, left ring ("left" arrow left, because this is a heading to the left)
+** org goto
+right middle up LT, left index right ("g" for goto)
+
+this is very customizable
+** go to end of current subtree (pre-subheadings)
+[[Swiper]] broke this
+<<end-of-heading-pre-sub-headings>>
+right middle up LT, left index ("left" right arrow for end of subtree)
+
+regex "beginning of line" = "^"
+regex asterisk = "\*"
+regex at least one asterisk = "\*+"
+regex including space after last asterisk = "^\*+ "
+regex EOF = "\'"
+combined regex = "^\*+ \|\'"
+(go to beginning of line)
+(and then back up one char)
+this gets to the end of the text under a heading before any subheadings
+
+don't think I can have a literal "^" in the heading for this to work
+
+to add more content to current subtree
+
+ESC ESC F7
+** search org-in-buffer-headings (helm-org)
+<<search org-in-buffer-headings (helm-org)>>
+left middle up LT, right index left ("h" for heading)
+
+- this is a command, so mapped to custom binding in emacs
+- helm-org-in-buffer-headings
+- ESC ESC F6
+** follow link
+right middle up + right index tri layer, left index right ("g" for go)
+
+have this add the mark (inactive) to the ring too so that I can jump back to the location
+** move by syntactic units
+*** navigation
+Ca/e beg/end line
+M-a M-e: sentences
+C-M-a C-M-e: functions
+C-f C-b: characters  
+M-f M-b: words
+C-M-f C-M-b: sexps
+
+paragraphs have been changes in config M-[ and M-] move, shift selection works
+
+special note for M-m moving to beginning of text
+*** selection
+M-h paragraph
+C-M-h function
+*** killing
+C-backspace, M-backspace, and M-delete all kill back word
+C-M-backspace is undefined
+M-d, C-delete kill to the end of a word
+M-k kill forward to the end of a sentence
+M-C-k kill sexp forward
+- there are 8 of these: they should be forward and back kill everything but par/funcs
+
+
+** exchange point and mark
+this is bound by default to C-x C-x
+* structure editing
+** mark subtree
+** cut subtree
+right middle up LT, left ring up ("w" for cut)
+** copy subtree
+right middle up + right index tri layer, left ring up ("w" for copy)
+** org paste subtree
+left middle up LT, right index up left ("y" for paste)
+** toggle heading
+** refile
+right middle up LT, left index up ("r" for refile)
+** rename heading
+<<rename-heading>>
+left middle up + left index tri layer, right index left ("h" for heading)
+
+- C-M-r "^\*+ " to get to the begining of the title
+- have to jump to the end of the search (or just C-s " ")
+- C-e to get to the end of the title
+- ESC ESC F8
+- don't think I can have a literal "$" in the heading for this to work
+** add a new heading in level at end of subheadings
+C-M-return
+* org links
+there is a built-in function to toggle hyperlinks (org-toggle-link-display)
+right index + right middle up tri-layer, left right (l for link)
+
+assign org follow link to right middle up lt, right right right (l for link)
+
+assign org store link to left middle up lt, left ring (s for store)
+
+assign org last stored link to left index + left middle up tri layer, left ring (s for stored)
+* org roam
+** new node
+right middle up lt, right index up (r for roam prefix)
+n
+** new id
+right middle up lt, right index up (r for roam prefix)
+i
+** insert link
+right middle up lt, right index up (r for roam prefix)
+l
+** toggle buffer
+right middle up lt, right index up (r for roam prefix)
+b
+** roam find
+right middle up lt, right index up (r for roam prefix)
+f
+** org-roam-store-link
+is this a thing? Should it be assigned to prefix-s?
+*** last stored link
+is there a special one for org roam? should it be assigned to prefix-2 (right index + right middle up + r) s?
+* org capture
+** open basic template
+right middle up + right index tri layer, left index up right (t for text)
+** something to do with saving it 
+right middle up + right index tri layer, left ring (s for save)
+* yasnippet
+<<yasnippet>>
+** expand snippet
+right index LT, left index up
+ESC ESC F5
+** new snippet
+* macros
+** qmk rec 1
+macro tri-layer, right index up
+** qmk stop
+macro tri-layer, right middle up
+** qmk play 1
+macro tri-layer, right right up
+** qmk delay
+macro tri-layer, right index left
+** qmk rec 2
+macro tri-layer, right index down left
+** qmk play 2
+macro tri-layer, right index up left
+** macro rec
+macro tri-layer, right index down
+** macro stop
+macro tri-layer, right middle down
+** macro play
+macro tri-layer, right ring down
+** macro ring previous (defined later)
+macro tri-layer, right ring (right arrow)
+** macro ring next (defined earlier)
+macro tri-layer, right index (left arrow)
+** re-execute last macro and add keys to def
+macro tri-layer, right pinky dow
+* switching/selecting monitors
+- The window movement layer can maximize on all the major movement keys, and then the right index left keys can the top half, left half, bottom half, and pinky down can be right half
+** move pointer to active window
+right pinky on mouse/select/switch layers all bring cursor to middle of active
+* searching
+** incremental (and regex)
+C-s like normal, M-r from within i-search for regex
+** swiper
+<<Swiper>>
+left index, right middle up tri layer, left ring (s for search)
+ESC ESC F9
+** imenu
+hold c, tap i (for cousel imenu)
+** avy
+C-M-s
+** deft
+left index + right middle up tri layer, left middle (d for deft)
+
+swiper tri layer -> d
+* mark ring
+** back current buffer mark
+both index tri layer, left middle
+** forward current buffer mark
+both index tri layer, right middle
+** back global mark
+both index tri layer, left ring
+** forward global mark
+both index tri layer, right ring
+* multiple cursors
+- don't foget you have to use C-j to add a newline
+** settings before custom bindings
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+** next match
+right index up LT, left index up
+** previous match
+right index up LT, left middle up
+** match all
+right index up LT, left pinky up
+** undo last next match
+right index up LT, left ring up
+mc/unmark-next-like-this
+** undo last previous match
+right index up LT, left index up right
+mc/unmark-previous-like-thi
+** add cursors below
+this is just "next match" with nothing selected
+** add cursors above
+this is just "previous match" with nothing selected
+** phi search
+right index down (for m) left index tri layer, left ring (s for search)
+* jump to active minibuffer
+C-M-<end>
+* various
+** insert a screen clip as a link
+left middle up + left index tri layer, right index up left ("y" for paste)
+
+and paste the file in the "screenclips" folder
+** display images
+right middle up LT, left index down ("v" for view (also muscle memory for C-c C-x C-v))
+** narrow (and widen) buffer to subtree
+left middle up LT, right index down left ("n" for narrow)
+*** widen
+left middle up + left index tri layer, right index down left ("n" for narrow)
+** narrow to code buffer
+right middle up LT, left middle down ("c" for code)
+** change buffer
+middle up right LT, left index down right ("b" for buffer)
+** latex preview
+left middle up LT, right pinky up (p for preview)
+* contract region
+the key below expand region (RPr + LR is ER)
+* custom emacs bindings
+** duplicate line
+C-d (this overrides the same functionality as the delete key)
+** ESC ESC F5-F9
+*** yasnippet
+[[yasnippet]]
+ESC ESC F5
+*** search org-in-buffer-headings (helm-org)
+[[search org-in-buffer-headings (helm-org)]]
+ESC ESC F6
+*** end-of-heading
+[[end-of-heading-pre-sub-headings]]
+ESC ESC F7
+*** rename heading
+[[rename-heading]]
+ESC ESC F8
+*** swiper
+[[Swiper]]
+ESC ESC F9
+** ESC F5-F9
+(Maybe F9 will be used for everything, about to try this with further keys)
+*** forward local mark
+f5
+*** backward global mark
+f6
+*** forward global mark
+f7
+*** counsel imenu
+f8
+** C-c ESC (unbound)
